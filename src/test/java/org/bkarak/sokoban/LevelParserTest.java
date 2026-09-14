@@ -26,13 +26,37 @@ class LevelParserTest {
     @Test
     void everyBundledLevelParses() throws IOException {
         Catalog catalog = Catalog.bundled();
-        assertEquals(65, catalog.levelNames().size(), "five original maps plus the 60 LOMA levels");
+        assertEquals(115, catalog.levelNames().size(), "five original maps, 60 LOMA levels and 50 Sasquatch III");
 
         for (String name : catalog.levelNames()) {
             Level level = catalog.loadLevel(name);
             assertEquals(true, level.boxes().size() > 0, name + " should have boxes");
             assertEquals(level.goalCount(), level.boxes().size(), name + " should have one goal per box");
         }
+    }
+
+    /**
+     * The failure that damaged the levels this game inherited: SoKonvert wrote plain floor for
+     * every {@code *}, which drops a box and a goal together and so leaves the counts balanced.
+     * A level that starts with boxes already on goals is the only thing that catches it.
+     */
+    @Test
+    void boxesThatStartOnGoalsSurvive() throws IOException {
+        Catalog catalog = Catalog.bundled();
+        int levelsWithHead = 0;
+        int boxesOnGoals = 0;
+
+        for (String name : catalog.levelNames()) {
+            GameState state = new GameState(catalog.loadLevel(name));
+            int onGoal = state.boxesOnGoal();
+            boxesOnGoals += onGoal;
+            if (onGoal > 0) {
+                levelsWithHead++;
+            }
+        }
+
+        assertEquals(77, levelsWithHead, "levels that start with at least one box on a goal");
+        assertEquals(415, boxesOnGoals, "boxes standing on goals across the bundled levels");
     }
 
     @Test

@@ -329,8 +329,8 @@ public final class GameWindow extends JFrame {
         JComboBox<String> combo = new JComboBox<>(items.toArray(String[]::new));
         combo.setFocusable(false);
         combo.setMaximumRowCount(16);
-        combo.setMaximumSize(new Dimension(160, 26));
-        combo.setPreferredSize(new Dimension(140, 26));
+        combo.setMaximumSize(new Dimension(200, 26));
+        combo.setPreferredSize(new Dimension(180, 26));
         combo.setAlignmentY(Component.CENTER_ALIGNMENT);
         return combo;
     }

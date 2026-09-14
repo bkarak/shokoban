@@ -4,8 +4,8 @@ A standalone desktop Sokoban for modern Java, rebuilt from the 1990s-era browser
 that used to live in this directory. Its source signs itself `Sokoban Ver. 1.00 - Java Port By
 ReneGade/TiS`; ReneGade/TiS was the handle of this repository's owner at the time, so the applet
 and the rebuild have the same author. The original tiles, skins, logo and levels are preserved;
-the game logic, rendering and level parsing were rewritten. Sixty-five levels and three skins
-ship with it — see [Levels](#levels).
+the game logic, rendering and level parsing were rewritten. A hundred and fifteen levels and
+three skins ship with it — see [Levels](#levels).
 
 ![Sokoban running on the desktop](docs/screenshot.png)
 
@@ -77,23 +77,43 @@ Anything outside the grid is treated as a wall, which keeps the borderless maps
 
 ## Levels
 
-Sixty-five levels ship in the jar. Five are the applet's own — `levelOne`, `level2`, `andrew1`,
-`andrew2` and `pipa`, in the legacy `%%` notation. The other sixty are **LOMA** (Levels Of Multi
-Authors), a collection assembled by Aymeric du Peloux and distributed with the SoKonvert utility
-that sat next to the applet on the website; they are stored as `.xsb` under
-`src/main/resources/sokoban/maps/loma/`.
+A hundred and fifteen levels ship in the jar, in three sets.
 
-The LOMA files here are **not** the ones the applet served. The site's copies came out of
-SoKonvert, which silently mapped `*` — a box already standing on a goal — to plain floor. That
-cost thirty-six of the fifty-nine published levels both a box and a goal apiece, which kept the
-box count matching the goal count and so looked well-formed while being unplayable: LOMA03-01
-arrived with one box instead of three and no way to reach the goal at all. These sixty are read
-straight from `levtext.txt`, the collection's own text, which is where SoKonvert read them from
-too. The sixtieth, LOMA10-06, is in that file but never made it through the converter, so the
-website never had it.
+| Set | Levels | Author | Format |
+| --- | --- | --- | --- |
+| the applet's own | 5 | `levelOne` and `pipa` unattributed, `level2` by nova, `andrew1` and `andrew2` by Giannis_gr | legacy `%%` |
+| `maps/loma/` | 60 | **LOMA**, Levels Of Multi Authors, assembled by Aymeric du Peloux | `.xsb` |
+| `maps/sasquatch3/` | 50 | **Sasquatch III**, by David W Skinner | `.xsb` |
 
-Every bundled level has been solved by breadth-first search over the real `GameState` rules,
-so all sixty-five are known to be winnable.
+Both collections came off this project's own website, where they were distributed inside
+SoKonvert, George Oikonomou's converter for the applet's map format. Neither carries a licence
+beyond its copyright line; they are bundled here with the authors credited, as they were on the
+website for twenty years.
+
+### The converted copies were damaged
+
+The levels are **not** the converted files the applet served. SoKonvert silently mapped `*` — a
+box already standing on a goal — to plain floor. That drops a box and a goal at the same time, so
+the box count still matches the goal count and nothing looks wrong; it was only breadth-first
+search over the real game rules that showed 25 of the applet's 59 LOMA levels to be unsolvable
+and most of the rest winnable in a handful of moves. LOMA03-01 is a three-box puzzle, and the
+converted copy had one box and no reachable goal. Thirty-six of the fifty-nine were damaged that
+way, and the Sasquatch III conversion in the same zip lost 358 boxes-on-goals across 38 of its
+49 files.
+
+Every level here is therefore read from the collections' own text, `levtext.txt` and
+`levtext2.txt`, which is where SoKonvert read them from too. That also recovers two levels the
+converter never emitted: LOMA10-06 and Sasquatch III 50.
+
+`LevelParserTest.boxesThatStartOnGoalsSurvive` is the guard against this happening again. It
+counts the boxes standing on goals at the start of every bundled level — 415 across 77 levels —
+which is the one thing a `*`-dropping import cannot preserve.
+
+All 110 imported levels have been rendered back out of the parsed model and compared to the
+collections' source text, character for character, with no differences. Solvability was checked
+by breadth-first search over the real `GameState` rules for the 65 levels small enough to search
+exhaustively (the five originals and all 60 LOMA); the Sasquatch III set runs from 6 to 152 boxes
+and is far beyond that, so those rest on being a published collection imported without loss.
 
 ## Artwork
 
@@ -124,6 +144,7 @@ src/main/java/org/bkarak/sokoban/        game model, level parsing, resources
 src/main/java/org/bkarak/sokoban/ui/     Swing window and board rendering
 src/main/resources/sokoban/              levels, skins, artwork, maps.cfg, skins.cfg
 src/main/resources/sokoban/maps/loma/    the LOMA collection, one .xsb per level
+src/main/resources/sokoban/maps/sasquatch3/  Sasquatch III, one .xsb per level
 src/test/java/                           JUnit 5 tests for the parser, game rules and assets
 tools/AssetUpscaler.java                 offline artwork upscaler, not part of the jar
 tools/Screenshot.java                    regenerates docs/screenshot.png, not part of the jar
