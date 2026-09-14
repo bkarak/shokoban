@@ -233,7 +233,8 @@ public final class GameWindow extends JFrame {
                 %s %s
 
                 A standalone desktop rebuild of the original browser applet
-                (Sokoban 1.00, Java port by ReneGade/TiS).
+                (Sokoban 1.00, Java port by ReneGade/TiS, the same author
+                under the handle he used in 1999).
                 Tiles and artwork are the originals; the game, rendering
                 and level parsing were rewritten for modern Java.
 

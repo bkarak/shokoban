@@ -1,9 +1,11 @@
 # Sokoban
 
 A standalone desktop Sokoban for modern Java, rebuilt from the 1990s-era browser applet
-that used to live in this directory (`Sokoban 1.00`, Java port by ReneGade/TiS). The original
-tiles, skins, logo and levels are preserved; the game logic, rendering and level parsing were
-rewritten. Sixty-five levels and three skins ship with it — see [Levels](#levels).
+that used to live in this directory. Its source signs itself `Sokoban Ver. 1.00 - Java Port By
+ReneGade/TiS`; ReneGade/TiS was the handle of this repository's owner at the time, so the applet
+and the rebuild have the same author. The original tiles, skins, logo and levels are preserved;
+the game logic, rendering and level parsing were rewritten. Sixty-five levels and three skins
+ship with it — see [Levels](#levels).
 
 ![Sokoban running on the desktop](docs/screenshot.png)
 
