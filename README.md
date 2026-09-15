@@ -73,7 +73,7 @@ And the standard `.xsb` text format used by most Sokoban collections:
 ```
 
 Anything outside the grid is treated as a wall, which keeps the borderless maps
-(`pipa`, `andrew2`) playable rather than throwing.
+(`easy`, `andrew2`) playable rather than throwing.
 
 ## Levels
 
@@ -81,7 +81,7 @@ A hundred and fifteen levels ship in the jar, in three sets.
 
 | Set | Levels | Author | Format |
 | --- | --- | --- | --- |
-| the applet's own | 5 | `levelOne` and `pipa` unattributed, `level2` by nova, `andrew1` and `andrew2` by Giannis_gr | legacy `%%` |
+| the applet's own | 5 | `levelOne` and `easy` unattributed, `level2` by nova, `andrew1` and `andrew2` by Giannis_gr | legacy `%%` |
 | `maps/loma/` | 60 | **LOMA**, Levels Of Multi Authors, assembled by Aymeric du Peloux | `.xsb` |
 | `maps/sasquatch3/` | 50 | **Sasquatch III**, by David W Skinner | `.xsb` |
 
