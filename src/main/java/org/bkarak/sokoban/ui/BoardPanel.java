@@ -110,7 +110,12 @@ public final class BoardPanel extends JPanel {
 
         for (int row = 0; row < level.rows(); row++) {
             for (int col = 0; col < level.cols(); col++) {
-                Tile tile = level.tileAt(new Position(row, col));
+                Position at = new Position(row, col);
+                Tile tile = level.tileAt(at);
+                // Floor outside the maze is the row padding, not part of the map: leave it dark.
+                if (tile != Tile.WALL && !level.isReachable(at)) {
+                    continue;
+                }
                 drawTile(g, skin.tileImage(tile), originX, originY, row, col, tileWidth, tileHeight);
             }
         }

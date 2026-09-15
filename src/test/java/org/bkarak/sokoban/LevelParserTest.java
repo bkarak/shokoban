@@ -88,6 +88,23 @@ class LevelParserTest {
         assertEquals(null, catalog.loadLevel("easy").collection());
     }
 
+    /**
+     * Ragged rows are padded with floor, which the board must not draw: it would put a slab of
+     * floor outside the maze. LOMA03-01's first row is two spaces and five walls, so (0,0) is
+     * padding that {@link Level#tileAt} calls floor and {@link Level#isReachable} does not.
+     */
+    @Test
+    void paddingAroundAMapIsNotReachable() throws IOException {
+        Level level = Catalog.bundled().loadLevel("LOMA03-01");
+
+        assertSame(Tile.FLOOR, level.tileAt(new Position(0, 0)));
+        assertEquals(false, level.isReachable(new Position(0, 0)), "padding outside the walls");
+        assertEquals(true, level.isReachable(level.start()), "the player stands inside");
+        for (Position box : level.boxes()) {
+            assertEquals(true, level.isReachable(box), "every box is inside");
+        }
+    }
+
     @Test
     void outsideTheGridReadsAsWall() {
         Level level = LevelParser.parse("@$.", "borderless");

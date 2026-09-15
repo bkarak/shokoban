@@ -85,6 +85,12 @@ author appear in the status bar and the window title, the collection in the stat
 Anything outside the grid is treated as a wall, which keeps the borderless maps
 (`easy`, `andrew2`) playable rather than throwing.
 
+Rows shorter than the widest one are padded with floor, and 104 of the 115 bundled levels are
+ragged, so the padding would otherwise be drawn as a slab of floor outside the maze. `Level`
+flood-fills from the player's start and the board draws every wall plus only the floor that
+comes back reachable. Rendering only: `tileAt` still answers for every square, so the rules and
+the level files are untouched.
+
 ## Levels
 
 A hundred and fifteen levels ship in the jar, in three sets.
