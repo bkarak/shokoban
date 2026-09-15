@@ -140,12 +140,17 @@ window and soft on a HiDPI screen. `tools/AssetUpscaler.java` upscales them offl
 java tools/AssetUpscaler.java        # rewrites the PNGs under src/main/resources/sokoban
 ```
 
-Tiles become 80×80 PNGs and the UI artwork gains a `@2x` variant. Both use EPX (Scale2x),
+Tiles become 160×160 PNGs and the UI artwork gains a `@2x` variant. Both use EPX (Scale2x),
 which doubles pixels and only bends an output pixel towards a neighbour where two adjacent
 neighbours agree — that rounds off the diagonals on the sprites and keeps the pixel-font
-lettering sharp. Bicubic resampling is available (`--tiles smooth`, `--chrome smooth`) but
-only softens this kind of art. Tile neighbours are sampled toroidally, so the upscales still
-repeat seamlessly across the board.
+lettering sharp. Eight times rather than four costs almost nothing: three EPX passes leave large
+flat areas, which PNG compresses away, so all three skins together went from 84 KB to 108 KB.
+The board is nearly always shrinking them now, and `BoardPanel` picks its interpolation from the
+artwork's own size, so it switches to nearest-neighbour only past 160 pixels a tile.
+
+Bicubic resampling is available (`--tiles smooth`, `--chrome smooth`) but only softens this kind
+of art. Tile neighbours are sampled toroidally, so the upscales still repeat seamlessly across
+the board.
 
 The originals stay in place as the input and as a fallback: `Skin` prefers `<tile>.png` and
 drops back to `<tile>.gif`, and `Resources.readArtwork` pairs each GIF with its `@2x` PNG in a

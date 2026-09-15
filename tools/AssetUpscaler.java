@@ -6,7 +6,7 @@
  * Sources are the original GIFs under src/main/resources/sokoban; the generated PNGs are
  * written beside them and are what the game actually loads:
  *
- *   skins/<skin>/<tile>.png    4x tiles, EPX/Scale2x, sampled toroidally so tiles stay seamless
+ *   skins/<skin>/<tile>.png    8x tiles, EPX/Scale2x, sampled toroidally so tiles stay seamless
  *   images/<name>@2x.png       2x UI artwork, used as the HiDPI variant
  *
  * Both default to EPX because the artwork is pixel art: bicubic resampling (--tiles smooth,
@@ -29,7 +29,7 @@ import javax.imageio.ImageIO;
 
 public class AssetUpscaler {
 
-    private static final int TILE_SCALE = 4;
+    private static final int TILE_SCALE = 8;
     private static final int CHROME_SCALE = 2;
 
     private enum Mode {

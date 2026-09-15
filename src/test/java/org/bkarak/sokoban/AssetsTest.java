@@ -22,7 +22,7 @@ class AssetsTest {
 
         for (String name : catalog.skinNames()) {
             Skin skin = catalog.loadSkin(name);
-            assertEquals(4 * Skin.SOURCE_TILE_SIZE, skin.tileWidth(), name + " should use the 4x tiles");
+            assertEquals(8 * Skin.SOURCE_TILE_SIZE, skin.tileWidth(), name + " should use the 8x tiles");
             assertEquals(skin.tileWidth(), skin.tileHeight(), name + " tiles should be square");
 
             for (BufferedImage tile : List.of(skin.wall(), skin.floor(), skin.goal(), skin.box(),
