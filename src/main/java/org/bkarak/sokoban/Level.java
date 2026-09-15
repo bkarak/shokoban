@@ -8,13 +8,20 @@ public final class Level {
 
     private final String name;
     private final String author;
+    private final String collection;
     private final Tile[][] tiles;
     private final Position start;
     private final List<Position> boxes;
 
     public Level(String name, String author, Tile[][] tiles, Position start, List<Position> boxes) {
+        this(name, author, null, tiles, start, boxes);
+    }
+
+    public Level(String name, String author, String collection, Tile[][] tiles, Position start,
+            List<Position> boxes) {
         this.name = Objects.requireNonNull(name, "name");
         this.author = Objects.requireNonNull(author, "author");
+        this.collection = collection;
         this.tiles = copyOf(tiles);
         this.start = Objects.requireNonNull(start, "start");
         this.boxes = List.copyOf(boxes);
@@ -26,6 +33,11 @@ public final class Level {
 
     public String author() {
         return author;
+    }
+
+    /** The set this level was published in, or {@code null} for the maps that came with the applet. */
+    public String collection() {
+        return collection;
     }
 
     public int rows() {

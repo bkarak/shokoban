@@ -68,12 +68,13 @@ public final class LevelParser {
                 .map(String::strip)
                 .filter(row -> !row.isEmpty())
                 .toList();
-        return build(name, author, rows, LevelParser::legacyCells);
+        return build(name, author, null, rows, LevelParser::legacyCells);
     }
 
     private static Level parseText(String source, String fallbackName) {
         String name = fallbackName;
         String author = "unknown";
+        String collection = null;
         List<String> rows = new ArrayList<>();
 
         for (String rawLine : source.split("\\R")) {
@@ -88,6 +89,8 @@ public final class LevelParser {
                         name = value;
                     } else if (key.equals("author")) {
                         author = value;
+                    } else if (key.equals("collection")) {
+                        collection = value;
                     }
                 }
                 continue;
@@ -100,7 +103,7 @@ public final class LevelParser {
             }
             rows.add(line);
         }
-        return build(name, author, rows, LevelParser::textCells);
+        return build(name, author, collection, rows, LevelParser::textCells);
     }
 
     private record Cell(Tile tile, boolean box, boolean player) {
@@ -153,7 +156,8 @@ public final class LevelParser {
         return cells;
     }
 
-    private static Level build(String name, String author, List<String> rows, Function<String, List<Cell>> rowParser) {
+    private static Level build(String name, String author, String collection, List<String> rows,
+            Function<String, List<Cell>> rowParser) {
         if (rows.isEmpty()) {
             throw new LevelFormatException("level '" + name + "' has no rows");
         }
@@ -193,6 +197,6 @@ public final class LevelParser {
         if (boxes.isEmpty()) {
             throw new LevelFormatException("level '" + name + "' has no boxes");
         }
-        return new Level(name, author, tiles, start, boxes);
+        return new Level(name, author, collection, tiles, start, boxes);
     }
 }

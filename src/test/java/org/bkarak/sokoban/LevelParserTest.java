@@ -76,6 +76,19 @@ class LevelParserTest {
     }
 
     @Test
+    void bundledCollectionsCarryTheirProvenance() throws IOException {
+        Catalog catalog = Catalog.bundled();
+
+        assertEquals("Many Authors", catalog.loadLevel("LOMA03-01").author());
+        assertEquals("LOMA (Levels Of Multi Authors), collected by Aymeric du Peloux",
+                catalog.loadLevel("LOMA03-01").collection());
+        assertEquals("David W Skinner", catalog.loadLevel("Sasquatch III 48").author());
+
+        // The applet's own maps predate the notion; they carry no collection.
+        assertEquals(null, catalog.loadLevel("easy").collection());
+    }
+
+    @Test
     void outsideTheGridReadsAsWall() {
         Level level = LevelParser.parse("@$.", "borderless");
 

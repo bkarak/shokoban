@@ -54,6 +54,7 @@ public final class GameWindow extends JFrame {
     private final Catalog catalog;
     private final Map<String, Skin> skinCache = new HashMap<>();
     private final BoardPanel board = new BoardPanel();
+    private final JLabel credit = new JLabel();
     private final JLabel status = new JLabel();
     private final JComboBox<String> levelBox;
     private final JComboBox<String> skinBox;
@@ -180,7 +181,45 @@ public final class GameWindow extends JFrame {
     private void refresh() {
         board.repaint();
         undoButton.setEnabled(state != null && state.canUndo());
+        credit.setText(creditText());
+        credit.setToolTipText(state == null ? null : creditTooltip());
         status.setText(statusText());
+        setTitle(state == null ? Sokoban.NAME : Sokoban.NAME + " \u2014 " + state.level().name());
+    }
+
+    /**
+     * Who made the level that is on screen. The pickers show the catalogue's label, which is not
+     * always what the level calls itself — "level 3" is andrew1 — so the name is repeated here
+     * next to its author, and again in the window title.
+     */
+    private String creditText() {
+        if (state == null) {
+            return " ";
+        }
+        Level level = state.level();
+        String author = namedAuthor(level);
+        return author == null
+                ? "  " + level.name()
+                : "  %s, by %s".formatted(level.name(), author);
+    }
+
+    private String creditTooltip() {
+        Level level = state.level();
+        String author = namedAuthor(level);
+        StringBuilder text = new StringBuilder(level.name());
+        text.append(author == null ? ", author unrecorded" : ", by " + author);
+        if (level.collection() != null) {
+            text.append('\n').append("From ").append(level.collection());
+        }
+        return "<html>" + text.toString().replace("\n", "<br>") + "</html>";
+    }
+
+    /** The author, or {@code null} for the placeholders the old map files used instead of a name. */
+    private static String namedAuthor(Level level) {
+        String author = level.author().strip();
+        return author.isEmpty() || author.equalsIgnoreCase("default") || author.equalsIgnoreCase("unknown")
+                ? null
+                : author;
     }
 
     private String statusText() {
@@ -188,8 +227,8 @@ public final class GameWindow extends JFrame {
             return " ";
         }
         Level level = state.level();
-        return "  %s by %s   |   %d x %d   |   moves %d   |   pushes %d   |   boxes %d/%d"
-                .formatted(level.name(), level.author(), level.cols(), level.rows(),
+        return "%d \u00d7 %d   |   moves %d   |   pushes %d   |   boxes %d/%d  "
+                .formatted(level.cols(), level.rows(),
                         state.moves(), state.pushes(), state.boxesOnGoal(), state.goalTarget());
     }
 
@@ -307,12 +346,16 @@ public final class GameWindow extends JFrame {
     }
 
     private JComponent buildStatusBar() {
+        credit.setForeground(TEXT);
+        credit.setFont(credit.getFont().deriveFont(Font.PLAIN, 11f));
         status.setForeground(MUTED);
         status.setFont(status.getFont().deriveFont(Font.PLAIN, 11f));
-        status.setBorder(BorderFactory.createEmptyBorder(6, 6, 8, 6));
+
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(CHROME);
-        panel.add(status, BorderLayout.WEST);
+        panel.setBorder(BorderFactory.createEmptyBorder(6, 6, 8, 6));
+        panel.add(credit, BorderLayout.WEST);
+        panel.add(status, BorderLayout.EAST);
         return panel;
     }
 

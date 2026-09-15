@@ -46,6 +46,12 @@ jpackage --name Sokoban --app-version 2.0.0 --type app-image \
 
 Levels and skins can also be switched from the toolbar pickers. Undo history is unlimited.
 
+The pickers list the catalogue's own labels, which are not always what a level calls itself —
+"level 3" is `andrew1` — so the window title and the left of the status bar carry the level's real
+name and its author, and the tooltip there adds the size and the collection it came from. Levels
+whose author field is the old `default` or `unknown` placeholder show no author rather than
+claiming one.
+
 ## Level formats
 
 Two notations are accepted. The legacy applet format, keyed fields separated by `%%` with map
@@ -67,10 +73,14 @@ And the standard `.xsb` text format used by most Sokoban collections:
 ```
 ; Title: tiny
 ; Author: tester
+; Collection: Examples, by nobody
 #####
 #@$.#
 #####
 ```
+
+`Title`, `Author` and `Collection` are read; any other comment is ignored. The name and the
+author appear in the status bar and the window title, the collection in the status bar's tooltip.
 
 Anything outside the grid is treated as a wall, which keeps the borderless maps
 (`easy`, `andrew2`) playable rather than throwing.
